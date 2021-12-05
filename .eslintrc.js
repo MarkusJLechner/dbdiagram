@@ -29,5 +29,6 @@ module.exports = {
     'prettier/prettier': ['error'],
     'vue/no-multiple-template-root': 'off',
     'vue/script-setup-uses-vars': 'error',
+    'vue/no-v-model-argument': 'off'
   },
 }

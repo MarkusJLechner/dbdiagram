@@ -1,7 +1,7 @@
 <template>
   <div class="editor h-full">
     <v-ace-editor
-      v-model="content"
+      v-model:value="content"
       lang="sql"
       theme="monokai"
       style="height: 100%; width: 100%"
@@ -82,7 +82,7 @@ function doParseCode() {
 }
 
 watch(parsedCode, () => {
-  emit('update', parsedCode)
+  emit('update', parsedCode.value)
 })
 </script>
 
@@ -90,6 +90,5 @@ watch(parsedCode, () => {
 .editor {
   color: #fff;
   background-color: #282828;
-  width: 324px;
 }
 </style>

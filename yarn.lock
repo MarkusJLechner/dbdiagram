@@ -282,6 +282,25 @@
     remark "^13.0.0"
     unist-util-find-all-after "^3.0.2"
 
+"@svgdotjs/svg.draggable.js@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@svgdotjs/svg.draggable.js/-/svg.draggable.js-3.0.2.tgz#a8d935ce495a40ab575e8bc11406ae61ebb4f455"
+  integrity sha512-yqCJe/w1q3IK51zRiqB42rsvQHyX5oqg/Eck02TDRhRv+pQ7sSHJfdyljiGkqoFW4i/1sIpnqYmiLDeM12Nhsw==
+  dependencies:
+    "@svgdotjs/svg.js" "^3.0.10"
+
+"@svgdotjs/svg.js@^3.0.10", "@svgdotjs/svg.js@^3.0.16", "@svgdotjs/svg.js@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@svgdotjs/svg.js/-/svg.js-3.1.1.tgz#3cf6a59e6d8708cd76d38b26e7d682dacb2f3670"
+  integrity sha512-73FggAUBS+zuHhJOMZiAsuE5qpwA4pmWUbLuvof2g3YnWEc3QhXA3tjqZlJJukBobSA23a/avf1Vb1U1QbER1Q==
+
+"@svgdotjs/svg.panzoom.js@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@svgdotjs/svg.panzoom.js/-/svg.panzoom.js-2.1.2.tgz#50e66a861f7c4f9e3992707f8e62e6e8da5c5223"
+  integrity sha512-0Nzo2TRlTebW3pzfAPtHx8Ye7Y3kuMEkK7hwVJi0SgQUB/vstjg7fvCJxB++EqsuDEetP0/SC+4CpLMVm6Lh2g==
+  dependencies:
+    "@svgdotjs/svg.js" "^3.0.16"
+
 "@types/mdast@^3.0.0":
   version "3.0.10"
   resolved "https://registry.yarnpkg.com/@types/mdast/-/mdast-3.0.10.tgz#4724244a82a4598884cbbe9bcfd73dff927ee8af"

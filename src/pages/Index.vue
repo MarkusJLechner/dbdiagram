@@ -7,12 +7,12 @@
       <ThemeSwitcher />
     </TheHeader>
     <div class="wrapper flex flex-grow" @mouseup="mouseup">
-      <div class="resize-box" style="width: 200px">
+      <div class="resize-box" style="width: 300px; min-width: 250px; flex-grow: 0">
         <CodeEditor @update="updateCode" />
       </div>
       <div class="handler" @mousedown="mousedown" @mousemove="mousemove"></div>
       <div class="resize-box" style="flex-grow: 1">
-        <Diagram class="h-full" v-model="parsedCode" />
+        <Diagram v-model="parsedCode" class="h-full" />
       </div>
     </div>
   </div>
@@ -41,8 +41,10 @@ onMounted(() => {
 })
 
 function updateCode(code) {
-  console.log(code)
-  parsedCode.value = code.value
+  console.log({ code })
+  // parsedCode.value = code.value
+  parsedCode.value = code
+  Object.assign(code, parsedCode.value)
 }
 
 function mousedown(e) {
@@ -58,7 +60,7 @@ function mousemove(e) {
   let pointerRelativeXpos = e.clientX - containerOffsetLeft
   let boxAminWidth = 60
   boxA.style.width = Math.max(boxAminWidth, pointerRelativeXpos - 8) + 'px'
-  boxA.style.flexGrow = 0
+  boxA.style.flexGrow = 1
 }
 function mouseup(e) {
   isHandlerDragging = false
@@ -86,5 +88,4 @@ function mouseup(e) {
   box-sizing: border-box;
   flex: 1 1 auto;
 }
-
 </style>

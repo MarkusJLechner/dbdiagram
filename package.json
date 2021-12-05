@@ -9,11 +9,14 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.20",
+    "@svgdotjs/svg.draggable.js": "^3.0.2",
+    "@svgdotjs/svg.js": "^3.1.1",
+    "@svgdotjs/svg.panzoom.js": "^2.1.2",
     "nanoid": "^3.1.23",
+    "vue": "^3.2.20",
     "vue-router": "^4.0.8",
-    "vuex": "^4.0.1",
-    "vue3-ace-editor": "^2.2.1"
+    "vue3-ace-editor": "^2.2.1",
+    "vuex": "^4.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.4",
