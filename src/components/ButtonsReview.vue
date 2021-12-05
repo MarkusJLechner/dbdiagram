@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { Ease } from '@/plugins/conts.js'
+import { Ease } from '@/js/conts.js'
 
 export default {
   name: 'ButtonsReview',

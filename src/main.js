@@ -5,10 +5,10 @@ import router from './router'
 import './assets/styles/index.css'
 import store from './store'
 
-import longPress from '@/plugins/directives/longPress.js'
-import ripple from '@/plugins/directives/ripple.js'
-import autofocus from '@/plugins/directives/autofocus.js'
-import keepScroll from '@/plugins/directives/keepScroll.js'
+import longPress from '@/js/directives/longPress.js'
+import ripple from '@/js/directives/ripple.js'
+import autofocus from '@/js/directives/autofocus.js'
+import keepScroll from '@/js/directives/keepScroll.js'
 
 const app = createApp(App)
 

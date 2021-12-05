@@ -16,7 +16,7 @@
 
 <script>
 import Toasts from '@/components/Toasts.vue'
-import { persist } from '@/plugins/global.js'
+import { persist } from '@/js/global.js'
 import { clearToasts, refstorage } from '@/store/globalstate.js'
 import { watch } from 'vue'
 

@@ -1,8 +1,8 @@
 import { ref, watch } from 'vue'
-import { resolveObjectPath, vibrate } from '@/plugins/global.js'
+import { resolveObjectPath, vibrate } from '@/js/global.js'
 import { nanoid } from 'nanoid'
-import { ToastType } from '@/plugins/conts.js'
-import { defaultSettings } from '@/plugins/defaultSettings.js'
+import { ToastType } from '@/js/conts.js'
+import { defaultSettings } from '@/js/defaultSettings.js'
 
 const storeItemSubscribers = {}
 

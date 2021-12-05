@@ -28,7 +28,7 @@
 <script>
 import LoadingLogo from '@/components/LoadingLogo.vue'
 import { modalOpened } from '@/store/globalstate.js'
-import { isMobile, sleep } from '@/plugins/global.js'
+import { isMobile, sleep } from '@/js/global.js'
 export default {
   name: 'MainContent',
   components: { LoadingLogo },
