@@ -1,20 +1,7 @@
 <template>
   <div class="flex-grow flex overflow-y-auto w-full">
     <div
-      class="
-        pulldown-element
-        rounded-full
-        p-2
-        bg-white
-        mt-3
-        shadow-lg
-        pointer-events-none
-        absolute
-        inline-flex
-        justify-center
-        items-center
-        z-10
-      "
+      class="pulldown-element rounded-full p-2 bg-white mt-3 shadow-lg pointer-events-none absolute inline-flex justify-center items-center z-10"
     >
       <LoadingLogo />
     </div>

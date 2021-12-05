@@ -2,13 +2,18 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es2021: true,
+    es2021: true
   },
   extends: [
     'plugin:vue/recommended',
     '@vue/prettier',
     'plugin:prettier/recommended',
+    'plugin:vue/base',
   ],
+  globals: {
+    defineProps: "readonly",
+    defineEmits: "readonly"
+  },
   parserOptions: {
     parser: '@babel/eslint-parser',
     ecmaVersion: 12,
@@ -23,5 +28,6 @@ module.exports = {
     semi: ['error', 'never'],
     'prettier/prettier': ['error'],
     'vue/no-multiple-template-root': 'off',
+    'vue/script-setup-uses-vars': 'error',
   },
 }
