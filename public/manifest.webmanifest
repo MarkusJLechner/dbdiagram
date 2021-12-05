@@ -1,0 +1,20 @@
+{
+  "name": "dbdiagram",
+  "short_name": "dbdiagram",
+  "theme_color": "#d71f83",
+  "background_color": "#4b5563",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "share_target": {
+    "action": "/#/shared",
+    "enctype": "multipart/form-data",
+    "method": "POST",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
