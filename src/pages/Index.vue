@@ -6,12 +6,12 @@
       <ThemeSwitcher />
       <ThemeSwitcher />
     </TheHeader>
-    <div class="wrapper flex flex-grow" @mouseup="mouseup">
-      <div class="resize-box" style="width: 300px; min-width: 250px; flex-grow: 0">
+    <div ref="box" class="box wrapper flex flex-grow">
+      <div class="left">
         <CodeEditor @update="updateCode" />
       </div>
-      <div class="handler" @mousedown="mousedown" @mousemove="mousemove"></div>
-      <div class="resize-box" style="flex-grow: 1">
+      <div class="resize"></div>
+      <div class="right">
         <Diagram v-model="parsedCode" class="h-full" />
       </div>
     </div>
@@ -29,63 +29,106 @@ import Diagram from 'components/Diagram.vue'
 
 const parsedCode = ref([])
 
-let handler
-let wrapper
-let boxA
-let isHandlerDragging
 onMounted(() => {
-  handler = document.querySelector('.handler')
-  wrapper = handler.closest('.wrapper')
-  boxA = wrapper.querySelector('.resize-box')
-  isHandlerDragging = false
+  dragControllerDiv()
 })
 
 function updateCode(code) {
-  console.log({ code })
-  // parsedCode.value = code.value
   parsedCode.value = code
-  Object.assign(code, parsedCode.value)
 }
 
-function mousedown(e) {
-  if (e.target === handler) {
-    isHandlerDragging = true
+function dragControllerDiv() {
+  const resize = document.getElementsByClassName('resize')
+  const left = document.getElementsByClassName('left')
+  const mid = document.getElementsByClassName('right')
+  const box = document.getElementsByClassName('box')
+  if (!(resize && left && mid && box)) {
+    return
   }
-}
-function mousemove(e) {
-  if (!isHandlerDragging) {
-    return false
+  for (let i = 0; i < resize.length; i++) {
+    resize[i].onmousedown = function (e) {
+      const startX = e.clientX
+      document.onmousemove = function (e) {
+        resize[i].left = startX
+        const endX = e.clientX
+        let moveLen = resize[i].left + (endX - startX)
+        const maxT = box[i].clientWidth - resize[i].offsetWidth
+        if (moveLen < 32) {
+          moveLen = 32
+        }
+        if (moveLen > maxT - 150) {
+          moveLen = maxT - 150
+        }
+        resize[i].style.left = moveLen
+        for (let j = 0; j < left.length; j++) {
+          left[j].style.width =
+            (moveLen / document.body.clientWidth) * 100 + '%'
+          mid[j].style.width =
+            ((box[i].clientWidth - moveLen) / document.body.clientWidth -
+              0.008) *
+              100 +
+            '%'
+        }
+      }
+      document.onmouseup = function () {
+        document.onmousemove = null
+        document.onmouseup = null
+        resize[i].releaseCapture && resize[i].releaseCapture()
+      }
+      resize[i].setCapture && resize[i].setCapture()
+      return false
+    }
   }
-  let containerOffsetLeft = wrapper.offsetLeft
-  let pointerRelativeXpos = e.clientX - containerOffsetLeft
-  let boxAminWidth = 60
-  boxA.style.width = Math.max(boxAminWidth, pointerRelativeXpos - 8) + 'px'
-  boxA.style.flexGrow = 1
-}
-function mouseup(e) {
-  isHandlerDragging = false
 }
 </script>
 
 <style scoped>
-.handler {
-  width: 20px;
-  padding: 0;
-  cursor: ew-resize;
-  flex: 0 0 auto;
-}
-
-.handler::before {
-  content: '';
-  display: block;
-  width: 4px;
+.left {
   height: 100%;
-  background: #777;
-  margin: 0 auto;
+  width: 20%;
+  min-width: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  float: left;
 }
 
-.resize-box {
-  box-sizing: border-box;
-  flex: 1 1 auto;
+.resize {
+  cursor: col-resize;
+  float: left;
+  position: relative;
+  background-color: #333;
+  border-radius: 5px;
+  width: 12px;
+  height: 100%;
+  line-height: 100%;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  font-size: 1rem;
+  color: #777;
+  z-index: 2;
+}
+
+.resize::before {
+  content: '⋮';
+  position: absolute;
+  top: 45%;
+  left: 3px;
+}
+
+.resize:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+.right {
+  width: 80%;
+  float: left;
+  height: 100%;
+}
+
+.box {
+  width: 100%;
+  height: 7.8rem;
 }
 </style>

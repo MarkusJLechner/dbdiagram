@@ -14,7 +14,7 @@ let tableGroup
 function makeSnap(e) {
   const { handler, box } = e.detail
   e.preventDefault()
-  handler.move(box.x - (box.x % 25), box.y - (box.y % 25))
+  handler.move(box.x - (box.x % 10), box.y - (box.y % 10))
 }
 
 const props = defineProps({
@@ -35,8 +35,8 @@ watch(
       .rect(100, 100)
       .radius(6)
       .attr({
-        x: Math.floor(Math.random() * 25) * 25,
-        y: Math.floor(Math.random() * 25) * 25,
+        x: Math.floor(Math.random() * 10) * 10,
+        y: Math.floor(Math.random() * 10) * 10,
       })
       .fill('#' + Math.random().toString(16).substr(-6))
       .on('dragmove.namespace', makeSnap)
