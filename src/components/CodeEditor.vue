@@ -11,6 +11,7 @@
 </template>
 
 <script setup>
+import { nanoid } from "nanoid"
 import { ref, watch, onMounted } from 'vue'
 import { VAceEditor } from 'vue3-ace-editor'
 import { version } from 'ace-builds'
@@ -69,8 +70,9 @@ function doParseCode() {
 
   const columns = [...content.value.matchAll(regexColumns)].map((g) => g.groups)
 
-  const parsed = columns.map((m) => {
+  const parsed = columns.map((m, index) => {
     return {
+      id: parsedCode.value[index]?.id || nanoid(4),
       ...m,
       lines: [...m.content.matchAll(regexLines)].map((g) => g[1].trim()),
     }
