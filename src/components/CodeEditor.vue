@@ -74,7 +74,7 @@ function doParseCode() {
     return {
       id: parsedCode.value[index]?.id || nanoid(4),
       ...m,
-      lines: [...m.content.matchAll(regexLines)].map((g) => g[1].trim()),
+      lines: [...m.content.matchAll(regexLines)].map((g) => g[1].trim().replace('}', '')).filter(Boolean),
     }
   })
 

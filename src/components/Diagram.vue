@@ -16,9 +16,16 @@ const props = defineProps({
 watch(
   () => props.modelValue,
   (newValue, oldValue) => {
-    clear()
-    newValue.forEach((table) => {
-      createTable({ ...table })
+    console.time('diff')
+    const diffs = diff(oldValue, newValue)
+    console.timeEnd('diff')
+    Object.entries(diffs).forEach(([key, changes]) => {
+      const diffEl = newValue[+key]
+      if (Object.keys(changes.lines).length || changes.table) {
+        console.time('create')
+        createTable({ ...diffEl })
+        console.timeEnd('create')
+      }
     })
   },
 )
@@ -31,6 +38,7 @@ onMounted(() => {
 <style>
 svg text {
   pointer-events: none;
+  user-select: none;
 }
 </style>
 <style scoped>

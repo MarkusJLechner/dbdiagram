@@ -4,9 +4,36 @@ import '@svgdotjs/svg.panzoom.js'
 
 let canvas
 let tableGroup
+let lineGroup
 
 let tableMemory = {}
 window.tableMemory = tableMemory
+
+function diff(obj1, obj2) {
+  const result = {}
+  if (Object.is(obj1, obj2)) {
+    return undefined
+  }
+  if (!obj2 || typeof obj2 !== 'object') {
+    return obj2
+  }
+  Object.keys(obj1 || {})
+    .concat(Object.keys(obj2 || {}))
+    .forEach((key) => {
+      if (obj2[key] !== obj1[key] && !Object.is(obj1[key], obj2[key])) {
+        result[key] = obj2[key]
+      }
+      if (typeof obj2[key] === 'object' && typeof obj1[key] === 'object') {
+        const value = diff(obj1[key], obj2[key])
+        if (value !== undefined) {
+          result[key] = value
+        }
+      }
+    })
+  return result
+}
+
+window.diff = diff
 
 export function init({ element = '.diagram' } = {}) {
   canvas = SVG().addTo(element).size('100%', '100%').panZoom({
@@ -20,6 +47,7 @@ export function init({ element = '.diagram' } = {}) {
   canvas.viewbox(0, 0, el.clientWidth, el.clientHeight)
 
   tableGroup = canvas.group({ name: 'tables' })
+  lineGroup = canvas.group({ name: 'lines' })
 
   setTimeout(() => {
     doBoundingBoxZoom()
@@ -46,6 +74,7 @@ function getTableChildren() {
 export function clear() {
   canvas.clear()
   tableGroup = canvas.group({ name: 'tables' })
+  lineGroup = canvas.group({ name: 'lines' })
 }
 
 function initTableMemory(id) {
@@ -69,9 +98,9 @@ export const createTable = ({
   id,
   table: tableName = 'No title',
   lines,
-  randomColor = false,
 }) => {
   if (tableMemory[id]) {
+    tableMemory[id].table.remove()
     x = tableMemory[id].position.x
     y = tableMemory[id].position.y
   } else {
@@ -79,9 +108,15 @@ export const createTable = ({
     y = Math.floor(Math.random() * 10) * 20
     setTablePosition({ id, x, y })
   }
+
+  const headerHeight = 20
+  const entryHeight = 20
+
+  const totalHeight = lines.length * entryHeight + headerHeight
+
   const table = SVG()
     .attr({ x: x, y: y, id })
-    .size(50, 50)
+    .size(50, totalHeight)
     .on('dragmove.namespace', modifierDragSnap)
     .draggable()
     .on('beforedrag', (e) => {
@@ -98,16 +133,13 @@ export const createTable = ({
       }
     })
 
-  const background = table
-    .nested()
-    .rect(table.width(), table.height())
-    .radius(6)
-    .fill(randomColor ? '#' + Math.random().toString(16).substr(-6) : '#d1d1d1')
+  const minWidth = 150
 
-  const headerGroup = table.group()
+  const headerGroup = table.nested()
+  const bodyGroup = table.nested()
 
   const headerBackground = headerGroup
-    .path(roundedRect(0, 0, table.width(), 20, 6, 6, 6, 0, 0))
+    .path(roundedRect(0, 0, table.width(), headerHeight, 6, 6, 6, 0, 0))
     .data('name', 'header')
     .attr({ x: 0, y: 0 })
     .fill('#184ea3')
@@ -117,12 +149,52 @@ export const createTable = ({
     .move(4, -2)
     .font({ fill: '#fff', anchor: 'center', size: 12, family: 'Verdana' })
 
-  console.log({ lines })
+  const newWidth = Math.max(headerText.bbox().x2 + 12, minWidth)
 
-  const newWidth = Math.max(headerText.bbox().x2 + 12, 150)
-  table.width(newWidth)
-  background.width(newWidth)
-  headerBackground.attr({ d: roundedRect(0, 0, newWidth, 20, 6, 6, 6, 0, 0) })
+  let textMaxWidth = minWidth
+  let linesBackground = []
+  const rowColorLight = '#ccc'
+  const rowColorDark = '#eee'
+
+  let initMousedown = null
+  lines.forEach((line, index) => {
+    let bodyBackground = bodyGroup
+      .rect(newWidth, entryHeight)
+      .attr({ x: 0, y: headerHeight + entryHeight * index })
+      .fill(index % 2 ? rowColorLight : rowColorDark)
+
+    linesBackground.push(bodyBackground)
+
+    bodyBackground.on('mousedown', function (event) {
+      console.log(event.target)
+      initMousedown = event.target
+    })
+    bodyBackground.on('mouseup', function (event) {
+      console.log(event.target)
+      if (initMousedown) {
+        initMousedown = null
+      }
+    })
+
+    const text = bodyGroup
+      .plain(line)
+      .move(6, headerHeight + entryHeight * index - 3)
+      .font({ fill: '#000', anchor: 'center', size: 12, family: 'Verdana' })
+
+    const textWidth = Math.max(text.bbox().x2 + 12, minWidth)
+    textMaxWidth = Math.max(textWidth, minWidth)
+  })
+
+  const calcWidth = Math.max(newWidth, textMaxWidth)
+
+  linesBackground.forEach((bg) => {
+    bg.width(calcWidth)
+  })
+
+  table.width(calcWidth)
+  headerBackground.attr({
+    d: roundedRect(0, 0, calcWidth, 20, 6, 6, 6, 0, 0),
+  })
 
   tableGroup.add(table)
 
